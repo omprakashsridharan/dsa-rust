@@ -1,7 +1,7 @@
 use std::cmp::PartialEq;
 use std::fmt::Debug;
 
-struct Search<S, T>
+struct LinearSearch<S, T>
 where
     T: Iterator<Item = S> + Clone,
     S: Debug + PartialEq,
@@ -9,7 +9,7 @@ where
     data: T,
 }
 
-impl<S, T> Search<S, T>
+impl<S, T> LinearSearch<S, T>
 where
     T: Iterator<Item = S> + Clone,
     S: Debug + PartialEq,
@@ -37,12 +37,12 @@ where
 
 #[cfg(test)]
 mod test {
-    use super::Search;
+    use super::LinearSearch;
 
     #[test]
     fn linear_exists() {
         let data = vec![1, 2, 3];
-        let search = Search { data: data.iter() };
+        let search = LinearSearch { data: data.iter() };
         let search_index = search.linear(&2);
         assert_eq!(search_index, 1)
     }
@@ -50,7 +50,7 @@ mod test {
     #[test]
     fn linear_not_exists() {
         let data = vec![1, 2, 3];
-        let search = Search { data: data.iter() };
+        let search = LinearSearch { data: data.iter() };
         let search_index = search.linear(&4);
         assert_eq!(search_index, -1)
     }
@@ -58,7 +58,7 @@ mod test {
     #[test]
     fn linear_many_with_criteria() {
         let data = vec![1, 2, 3, 4];
-        let search = Search { data: data.iter() };
+        let search = LinearSearch { data: data.iter() };
         let search_index = search.linear_many_with_criteria(|v| v % 2 == 0);
         assert_eq!(search_index, vec![1, 3])
     }
@@ -66,7 +66,7 @@ mod test {
     #[test]
     fn linear_many_with_criteria_not_exists() {
         let data = vec![1, 3, 5, 7];
-        let search = Search { data: data.iter() };
+        let search = LinearSearch { data: data.iter() };
         let search_index = search.linear_many_with_criteria(|v| v % 2 == 0);
         assert_eq!(search_index, vec![])
     }
