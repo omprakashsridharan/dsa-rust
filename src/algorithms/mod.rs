@@ -1,1 +1,2 @@
-pub mod linear_search;
+pub mod binary_search;
+pub mod linear_search_fancy;
