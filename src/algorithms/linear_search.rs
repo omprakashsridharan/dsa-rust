@@ -23,6 +23,16 @@ where
         }
         result
     }
+
+    pub fn linear_many_with_criteria(&self, predicate: fn(S) -> bool) -> Vec<i32> {
+        let mut result: Vec<i32> = vec![];
+        for (index, value) in self.data.clone().enumerate() {
+            if predicate(value) {
+                result.push(index as i32)
+            }
+        }
+        result
+    }
 }
 
 #[cfg(test)]
@@ -33,15 +43,31 @@ mod test {
     fn linear_exists() {
         let data = vec![1, 2, 3];
         let search = Search { data: data.iter() };
-        let search_instance = search.linear(&2);
-        assert_eq!(search_instance, 1)
+        let search_index = search.linear(&2);
+        assert_eq!(search_index, 1)
     }
 
     #[test]
-    fn linear_non_exists() {
+    fn linear_not_exists() {
         let data = vec![1, 2, 3];
         let search = Search { data: data.iter() };
-        let search_instance = search.linear(&4);
-        assert_eq!(search_instance, -1)
+        let search_index = search.linear(&4);
+        assert_eq!(search_index, -1)
+    }
+
+    #[test]
+    fn linear_many_with_criteria() {
+        let data = vec![1, 2, 3, 4];
+        let search = Search { data: data.iter() };
+        let search_index = search.linear_many_with_criteria(|v| v % 2 == 0);
+        assert_eq!(search_index, vec![1, 3])
+    }
+
+    #[test]
+    fn linear_many_with_criteria_not_exists() {
+        let data = vec![1, 3, 5, 7];
+        let search = Search { data: data.iter() };
+        let search_index = search.linear_many_with_criteria(|v| v % 2 == 0);
+        assert_eq!(search_index, vec![])
     }
 }
